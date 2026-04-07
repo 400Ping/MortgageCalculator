@@ -24,6 +24,10 @@ namespace MortgageCalculator
         private RichTextBox rtbQLearning;
         private RichTextBox rtbZKP;
         private RichTextBox rtbAIAdvice;
+        
+        private PictureBox picChart;
+        private double aiChartPrincipal = 0;
+        private double aiChartInterest = 0;
 
         public AdvancedForm(double housePrice, double loanAmount, double ratePercent, int years)
         {
@@ -69,7 +73,38 @@ namespace MortgageCalculator
             TabPage tab5 = CreateTab("投報率(IRR)", out rtbROI);
             TabPage tab6 = CreateTab("強化學習(RL)還款", out rtbQLearning);
             TabPage tab7 = CreateTab("隱私驗證(ZKP)", out rtbZKP);
-            TabPage tab8 = CreateTab("AI財務建議(整合)", out rtbAIAdvice);
+
+            TabPage tab8 = new TabPage("AI房貸健康體檢");
+            tab8.BackColor = Color.White;
+            
+            SplitContainer splitAI = new SplitContainer();
+            splitAI.Dock = DockStyle.Fill;
+            splitAI.Orientation = Orientation.Vertical;
+            splitAI.SplitterDistance = 500; 
+            
+            rtbAIAdvice = new RichTextBox();
+            rtbAIAdvice.Dock = DockStyle.Fill;
+            rtbAIAdvice.Font = new Font("Consolas", 11F);
+            rtbAIAdvice.ReadOnly = true;
+            rtbAIAdvice.BackColor = Color.FromArgb(248, 249, 250);
+            rtbAIAdvice.BorderStyle = BorderStyle.None;
+            
+            Panel paddingPanelText = new Panel();
+            paddingPanelText.Dock = DockStyle.Fill;
+            paddingPanelText.Padding = new Padding(15);
+            paddingPanelText.Controls.Add(rtbAIAdvice);
+            
+            splitAI.Panel1.Controls.Add(paddingPanelText);
+            
+            picChart = new PictureBox();
+            picChart.Dock = DockStyle.Fill;
+            picChart.Paint += PicChart_Paint;
+            
+            splitAI.Panel2.Controls.Add(picChart);
+            splitAI.Panel2.BackColor = Color.White;
+            splitAI.Panel2.Padding = new Padding(15);
+            
+            tab8.Controls.Add(splitAI);
 
             tabControl.TabPages.Add(tab1);
             tabControl.TabPages.Add(tab2);
@@ -333,9 +368,7 @@ namespace MortgageCalculator
         {
             StringBuilder sb = new StringBuilder();
             
-            // Calculate variables for the report
             double ltv = (loanAmount / housePrice) * 100;
-            
             double monthlyRate = (mortgageRate / 100) / 12;
             int totalMonths = loanYears * 12;
             double monthlyPayment = 0;
@@ -347,30 +380,94 @@ namespace MortgageCalculator
             double totalRepayment = monthlyPayment * totalMonths;
             double totalInterest = totalRepayment - loanAmount;
 
-            // Optional: You could read grace period from Form1 if passed, but assume 0 for here or generic 'N/A'
-            string gracePeriodStr = "視您的貸款合約而定";
+            aiChartPrincipal = loanAmount;
+            aiChartInterest = totalInterest;
+            if (picChart != null) picChart.Invalidate();
 
-            sb.AppendLine("AI 引擎：Python 外部模組 / C# 混和分析\n");
+            sb.AppendLine("📋 您的房貸健康體檢報告\n");
             
-            sb.AppendLine("【Python AI 財務建議】");
-            sb.AppendLine($"貸款成數(LTV): {ltv:F1}%");
-            sb.AppendLine($"貸款年限: {loanYears} 年");
-            sb.AppendLine($"提醒：寬限期後月付金通常會上升，請預留現金流。");
-            sb.AppendLine($"月付金約: NT$ {monthlyPayment:N0}");
-            sb.AppendLine($"總利息約: NT$ {totalInterest:N0}");
-            sb.AppendLine($"建議：若有額外獎金，可優先提前償還本金以降低總利息。");
-            sb.AppendLine($"分析方式：Python 規則模型 + 風險權重評分。\n");
+            sb.AppendLine("【基本財務診斷】");
+            sb.AppendLine($"▶️ 貸款成數 (LTV): {ltv:F1}%");
+            if(ltv > 80) sb.AppendLine("   ⚠️ 您的貸款成數較高，槓桿較大，請務必保留6個月以上的生活緊急預備金！");
+            else sb.AppendLine("   ✅ 貸款成數處於健康或常規範圍內。");
+            
+            sb.AppendLine($"▶️ 每月房貸繳款: NT$ {monthlyPayment:N0}");
+            sb.AppendLine($"   (請確保佔您每月總收入的 30%~40% 以內，以免引發財務危機)\n");
 
-            sb.AppendLine("【分析方式說明】");
-            sb.AppendLine("- 模型A：財務規則引擎（LTV、還款占比、寬限期壓力）");
-            sb.AppendLine("- 模型B：NLP模板生成（轉換為可讀建議）");
-            sb.AppendLine("- 模型C：跨語言協作（可用時呼叫 Python 分析模組）");
-            sb.AppendLine("- 安全：匯出支援 SHA256 完整性驗證\n");
-
-            sb.AppendLine("【Reward-based 建議引擎（類獎勵式學習）】");
-            sb.AppendLine("- 系統以『風險最小化 + 現金流穩定 + 利息壓低』做獎勵函數。");
+            sb.AppendLine("【綜合利息分析】");
+            sb.AppendLine($"▶️ 您總共跟銀行借了: NT$ {loanAmount:N0}");
+            sb.AppendLine($"▶️ 未來 {loanYears} 年要付給銀行的利息總額為: NT$ {totalInterest:N0}");
+            
+            if(totalInterest > loanAmount)
+            {
+                 sb.AppendLine("   ⚠️ 注意：經過長期的複利，您的『總利息』已經超越了你借的『本金』了！");
+            }
+            sb.AppendLine();
+            
+            sb.AppendLine("💡 【AI 大師決策指南】");
+            sb.AppendLine("1. 提早還款策略：右圖為您的利息與本金佔比圓餅圖，如果年終獎金有餘裕，強烈建議可向銀行申請『提前償還本金』，這能大幅削減紅色的龐大總利息。");
+            sb.AppendLine("2. 投資機會對比：如果您投資股市(例如ETF大盤)的年化報酬率有自信能長期超過房貸利率，那麼不急著還清房貸，將資金拿去投資滾利可能是較好的資金運用。");
+            sb.AppendLine("3. 寬限期地雷：若您目前有使用寬限期，請謹記寬限期結束後，本金攤還會使您的月繳款發生『暴增』，請現在就開始模擬幾年後的生活開銷變化。");
 
             rtbAIAdvice.Text = sb.ToString();
+        }
+
+        private void PicChart_Paint(object sender, PaintEventArgs e)
+        {
+            if (aiChartPrincipal == 0 && aiChartInterest == 0) return;
+
+            Graphics g = e.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            double total = aiChartPrincipal + aiChartInterest;
+            float sweepPrincipal = (float)((aiChartPrincipal / total) * 360f);
+            float sweepInterest = 360f - sweepPrincipal;
+
+            int padding = 40;
+            int diameter = Math.Min(picChart.Width, picChart.Height) - padding * 2;
+            
+            // Adjust if width is too small
+            if (diameter <= 0) return;
+
+            int x = (picChart.Width - diameter) / 2;
+            int y = (picChart.Height - diameter) / 2 - 20;
+
+            Rectangle rect = new Rectangle(x, y, diameter, diameter);
+
+            // Draw Pie
+            using (Brush bPrin = new SolidBrush(Color.FromArgb(46, 204, 113)))
+            using (Brush bInt = new SolidBrush(Color.FromArgb(231, 76, 60)))
+            {
+                g.FillPie(bPrin, rect, 0, sweepPrincipal);
+                g.FillPie(bInt, rect, sweepPrincipal, sweepInterest);
+            }
+
+            // Draw Legend and Title
+            using (Font titleFont = new Font("Segoe UI", 13F, FontStyle.Bold))
+            using (Font legendFont = new Font("Segoe UI", 11F, FontStyle.Bold))
+            using (Brush textBrush = new SolidBrush(Color.FromArgb(44, 62, 80)))
+            {
+                string title = "本金與總利息佔比";
+                SizeF titleSize = g.MeasureString(title, titleFont);
+                g.DrawString(title, titleFont, textBrush, (picChart.Width - titleSize.Width) / 2, 20);
+
+                string prinLegend = $"本金: {(aiChartPrincipal/total*100):F1}% ({aiChartPrincipal:N0} TWD)";
+                string intLegend = $"利息: {(aiChartInterest/total*100):F1}% ({aiChartInterest:N0} TWD)";
+
+                int lgndY = y + diameter + 20;
+                
+                using (Brush bPrinText = new SolidBrush(Color.FromArgb(46, 204, 113)))
+                {
+                    g.DrawString("■", legendFont, bPrinText, x, lgndY);
+                    g.DrawString(prinLegend, legendFont, textBrush, x + 20, lgndY);
+                }
+                
+                using (Brush bIntText = new SolidBrush(Color.FromArgb(231, 76, 60)))
+                {
+                    g.DrawString("■", legendFont, bIntText, x, lgndY + 25);
+                    g.DrawString(intLegend, legendFont, textBrush, x + 20, lgndY + 25);
+                }
+            }
         }
     }
 }
