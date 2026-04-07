@@ -1,0 +1,16 @@
+## Visual Studio / .NET
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+*.log
+
+## macOS
+.DS_Store
+.AppleDouble
+.LSOverride
