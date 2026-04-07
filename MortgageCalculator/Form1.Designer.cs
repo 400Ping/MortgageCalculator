@@ -164,7 +164,7 @@ namespace MortgageCalculator
             btnAdvanced.FlatStyle = FlatStyle.Flat;
             btnAdvanced.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             btnAdvanced.ForeColor = Color.White;
-            btnAdvanced.Location = new Point(170, 345);
+            btnAdvanced.Location = new Point(243, 345);
             btnAdvanced.Name = "btnAdvanced";
             btnAdvanced.Size = new Size(160, 45);
             btnAdvanced.TabIndex = 14;
