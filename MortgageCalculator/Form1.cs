@@ -15,6 +15,8 @@ namespace MortgageCalculator
         {
             CreateMenuStrip();
             SetAutoSize(true);
+            txtHousePrice.TextChanged += FormatNumberTextBox_TextChanged;
+            txtDownPaymentAmount.TextChanged += FormatNumberTextBox_TextChanged;
         }
 
         private void CreateMenuStrip()
@@ -80,12 +82,37 @@ namespace MortgageCalculator
             // Auto-calculate on input change
         }
 
+        private void FormatNumberTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                string text = textBox.Text.Replace(",", "");
+                if (decimal.TryParse(text, out decimal value))
+                {
+                    textBox.TextChanged -= FormatNumberTextBox_TextChanged;
+                    int selStart = textBox.SelectionStart;
+                    int origLen = textBox.Text.Length;
+
+                    textBox.Text = string.Format("{0:N0}", value);
+
+                    int diff = textBox.Text.Length - origLen;
+                    int newStart = selStart + diff;
+
+                    if (newStart < 0) newStart = 0;
+                    if (newStart > textBox.Text.Length) newStart = textBox.Text.Length;
+
+                    textBox.SelectionStart = newStart;
+                    textBox.TextChanged += FormatNumberTextBox_TextChanged;
+                }
+            }
+        }
+
         private void BtnCalculate_Click(object sender, EventArgs e)
         {
             try
             {
                 // Validate inputs
-                if (!decimal.TryParse(txtHousePrice.Text, out decimal housePrice) || housePrice <= 0)
+                if (!decimal.TryParse(txtHousePrice.Text.Replace(",", ""), out decimal housePrice) || housePrice <= 0)
                 {
                     MessageBox.Show("請輸入有效的房屋總價", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -103,7 +130,7 @@ namespace MortgageCalculator
                 }
                 else
                 {
-                    if (!decimal.TryParse(txtDownPaymentAmount.Text, out downPayment) || downPayment < 0)
+                    if (!decimal.TryParse(txtDownPaymentAmount.Text.Replace(",", ""), out downPayment) || downPayment < 0)
                     {
                         MessageBox.Show("請輸入有效的自備款金額", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -220,7 +247,7 @@ namespace MortgageCalculator
         {
             try
             {
-                if (!decimal.TryParse(txtHousePrice.Text, out decimal housePrice) || housePrice <= 0)
+                if (!decimal.TryParse(txtHousePrice.Text.Replace(",", ""), out decimal housePrice) || housePrice <= 0)
                 {
                     MessageBox.Show("請先輸入有效的房屋總價", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
@@ -234,7 +261,7 @@ namespace MortgageCalculator
                 }
                 else
                 {
-                    decimal.TryParse(txtDownPaymentAmount.Text, out downPayment);
+                    decimal.TryParse(txtDownPaymentAmount.Text.Replace(",", ""), out downPayment);
                 }
 
                 decimal loanAmount = housePrice - downPayment;

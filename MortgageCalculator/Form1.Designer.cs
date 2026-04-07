@@ -148,7 +148,7 @@ namespace MortgageCalculator
             btnCalculate.ForeColor = Color.White;
             btnCalculate.Location = new Point(20, 345);
             btnCalculate.Name = "btnCalculate";
-            btnCalculate.Size = new Size(140, 45);
+            btnCalculate.Size = new Size(186, 45);
             btnCalculate.TabIndex = 13;
             btnCalculate.Text = "📊 計算";
             btnCalculate.UseVisualStyleBackColor = false;
