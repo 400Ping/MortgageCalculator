@@ -26,29 +26,6 @@
 - **框架**：[.NET 10](https://dotnet.microsoft.com/)
 - **IDE**：[Visual Studio 2026](https://visualstudio.microsoft.com/) 或更新版本
 
-## 🚀 使用方式
-
-### 方法一：透過 Visual Studio 開啟
-
-1. Clone 此專案：
-   ```bash
-   git clone https://github.com/400Ping/MortgageCalculator.git
-   ```
-2. 使用 Visual Studio 開啟 `MortgageCalculator.slnx`
-3. 按下 `F5` 或點擊「啟動」即可執行
-
-### 方法二：透過 .NET CLI 執行
-
-1. Clone 此專案：
-   ```bash
-   git clone https://github.com/400Ping/MortgageCalculator.git
-   ```
-2. 進入專案目錄並執行：
-   ```bash
-   cd MortgageCalculator/MortgageCalculator
-   dotnet run
-   ```
-
 ## 📖 操作說明
 
 1. 輸入 **房屋總價**
@@ -84,7 +61,3 @@ MortgageCalculator/
     ├── Form1.Designer.cs            # 表單 UI 配置
     └── Form1.resx                   # 表單資源檔
 ```
-
-## 📝 License
-
-此專案僅供學術作業使用。
