@@ -70,6 +70,7 @@ MortgageCalculator/
 <summary><b>點擊展開系統預覽截圖</b></summary>
 <br>
 
+![截圖預覽9](screenshots/螢幕擷取畫面%202026-04-08%20020546.png)
 ![截圖預覽1](screenshots/螢幕擷取畫面%202026-04-08%20020315.png)
 ![截圖預覽2](screenshots/螢幕擷取畫面%202026-04-08%20020331.png)
 ![截圖預覽3](screenshots/螢幕擷取畫面%202026-04-08%20020344.png)
@@ -78,6 +79,5 @@ MortgageCalculator/
 ![截圖預覽6](screenshots/螢幕擷取畫面%202026-04-08%20020441.png)
 ![截圖預覽7](screenshots/螢幕擷取畫面%202026-04-08%20020457.png)
 ![截圖預覽8](screenshots/螢幕擷取畫面%202026-04-08%20020525.png)
-![截圖預覽9](screenshots/螢幕擷取畫面%202026-04-08%20020546.png)
 
 </details>
