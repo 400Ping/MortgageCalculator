@@ -24,7 +24,7 @@
 
 - **作業系統**：Windows
 - **框架**：[.NET 10](https://dotnet.microsoft.com/)
-- **IDE**：[Visual Studio 2022](https://visualstudio.microsoft.com/) 或更新版本
+- **IDE**：[Visual Studio 2026](https://visualstudio.microsoft.com/) 或更新版本
 
 ## 🚀 使用方式
 
