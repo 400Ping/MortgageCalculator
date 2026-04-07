@@ -216,6 +216,50 @@ namespace MortgageCalculator
             }
         }
 
+        private void BtnAdvanced_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!decimal.TryParse(txtHousePrice.Text, out decimal housePrice) || housePrice <= 0)
+                {
+                    MessageBox.Show("請先輸入有效的房屋總價", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                decimal downPayment = 0;
+                if (rbtnDownPaymentPercent.Checked)
+                {
+                    if (decimal.TryParse(txtDownPaymentPercent.Text, out decimal dpPer) && dpPer >= 0 && dpPer <= 100)
+                        downPayment = housePrice * dpPer / 100;
+                }
+                else
+                {
+                    decimal.TryParse(txtDownPaymentAmount.Text, out downPayment);
+                }
+
+                decimal loanAmount = housePrice - downPayment;
+
+                if (!decimal.TryParse(txtInterestRate.Text, out decimal annualRate) || annualRate < 0)
+                {
+                    MessageBox.Show("請先輸入有效的貸款利率", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                if (!int.TryParse(txtLoanTerm.Text, out int loanTermYears) || loanTermYears <= 0)
+                {
+                    MessageBox.Show("請先輸入有效的貸款年限", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                AdvancedForm advForm = new AdvancedForm((double)housePrice, (double)loanAmount, (double)annualRate, loanTermYears);
+                advForm.ShowDialog();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"無法開啟進階分析: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void panelInput_Paint(object sender, PaintEventArgs e)
         {
 

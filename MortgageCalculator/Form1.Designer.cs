@@ -1,4 +1,4 @@
-﻿namespace MortgageCalculator
+namespace MortgageCalculator
 {
     partial class Form1
     {
@@ -50,6 +50,7 @@
             label5 = new Label();
             label6 = new Label();
             btnCalculate = new Button();
+            btnAdvanced = new Button();
             panelInput = new Panel();
             txtHousePrice = new TextBox();
             rbtnDownPaymentPercent = new RadioButton();
@@ -147,11 +148,29 @@
             btnCalculate.ForeColor = Color.White;
             btnCalculate.Location = new Point(20, 345);
             btnCalculate.Name = "btnCalculate";
-            btnCalculate.Size = new Size(300, 45);
+            btnCalculate.Size = new Size(140, 45);
             btnCalculate.TabIndex = 13;
             btnCalculate.Text = "📊 計算";
             btnCalculate.UseVisualStyleBackColor = false;
             btnCalculate.Click += BtnCalculate_Click;
+            // 
+            // btnAdvanced
+            // 
+            btnAdvanced = new Button();
+            btnAdvanced.BackColor = Color.FromArgb(142, 68, 173);
+            btnAdvanced.Cursor = Cursors.Hand;
+            btnAdvanced.FlatAppearance.BorderSize = 0;
+            btnAdvanced.FlatAppearance.MouseOverBackColor = Color.FromArgb(155, 89, 182);
+            btnAdvanced.FlatStyle = FlatStyle.Flat;
+            btnAdvanced.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            btnAdvanced.ForeColor = Color.White;
+            btnAdvanced.Location = new Point(170, 345);
+            btnAdvanced.Name = "btnAdvanced";
+            btnAdvanced.Size = new Size(160, 45);
+            btnAdvanced.TabIndex = 14;
+            btnAdvanced.Text = "🚀 進階大師分析";
+            btnAdvanced.UseVisualStyleBackColor = false;
+            btnAdvanced.Click += BtnAdvanced_Click;
             // 
             // panelInput
             // 
@@ -171,6 +190,7 @@
             panelInput.Controls.Add(chkGracePeriod);
             panelInput.Controls.Add(txtGracePeriod);
             panelInput.Controls.Add(btnCalculate);
+            panelInput.Controls.Add(btnAdvanced);
             panelInput.Location = new Point(12, 143);
             panelInput.Name = "panelInput";
             panelInput.Size = new Size(493, 417);
@@ -459,6 +479,7 @@
         private Label label5;
         private Label label6;
         private Button btnCalculate;
+        private Button btnAdvanced;
         private Panel panelInput;
         private CheckBox chkGracePeriod;
         private Panel panelOutput;
